@@ -1,0 +1,25 @@
+.form-search-items-box {
+	.search-expand {
+		display: flex;
+		align-items: center;
+		justify-content: flex-end;
+		.expand-icon {
+			margin-right: 8px;
+			color: @primary-color;
+			cursor: pointer;
+			.expand {
+				transition: transform 0.5s;
+				transform: rotate(180deg);
+				transform-origin: center center;
+			}
+			.unexpand {
+				transition: transform 0.5s;
+				transform: rotate(0deg);
+				transform-origin: center center;
+			}
+			.anticon {
+				margin-right: 4px;
+			}
+		}
+	}
+}
