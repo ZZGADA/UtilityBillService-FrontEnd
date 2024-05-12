@@ -93,14 +93,13 @@ class RequestHttp {
 	}
 
 	// * 常用请求方法封装
-	get<T>(url: string, params?: object, _object = {}): Promise<ResultData<T>> {
+	get<T>(url: string, params?: any, _object = {}): Promise<ResultData<T>> {
 		return this.service.get(url, { params, ..._object })
 	}
 	post<T>(url: string, params?: object, _object = {}): Promise<ResultData<T>> {
 		return this.service.post(url, params, _object)
 	}
 	formpost<T>(url: string, params?: any): Promise<ResultData<T>> {
-		console.log('formpost的formparams', params)
 		return this.service.post(url, params)
 	}
 	put<T>(url: string, params?: object, _object = {}): Promise<ResultData<T>> {
