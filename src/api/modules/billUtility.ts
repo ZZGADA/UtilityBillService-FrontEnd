@@ -1,4 +1,4 @@
-import { UtilityBillService } from '@/api/config/servicePort'
+import { UtilityBillService, UtilityBillSignUpHead, UtilityBillHead } from '@/api/config/servicePort'
 import http from '@/api'
 
 interface universityInformation {
@@ -13,14 +13,22 @@ interface universityInformation_item {
 }
 
 export const getBillBySingleMail = (params: any) => {
-  return http.get(UtilityBillService + `/utilityBill/getBill`, params);
+  return http.get(UtilityBillService + `${UtilityBillHead}/getBill`, params);
 
 }
 
 export const getUniversityAndArea = () => {
-  return http.get(UtilityBillService + `/utilityBill/getUniversityAndArea`);
+  return http.get(UtilityBillService + `${UtilityBillSignUpHead}/dropDownList/getUniversityAndArea`);
 }
 
 export const getDormitoryDetails = (universityUuid: any) => {
-  return http.get(UtilityBillService + `/utilityBill/getDormitoryDetails`, universityUuid)
+  return http.get(UtilityBillService + `${UtilityBillSignUpHead}/dropDownList/getDormitoryDetails`, universityUuid)
+}
+
+export const getDormitoryFloor = () => {
+  return http.get(UtilityBillService + `${UtilityBillSignUpHead}/dropDownList/getDormitoryFloor`)
+}
+
+export const postUserSignUp = (params:any)=>{
+  return http.post(UtilityBillService+`${UtilityBillSignUpHead}/userSignUp`,params)
 }

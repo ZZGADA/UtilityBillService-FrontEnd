@@ -1,11 +1,13 @@
 import { Button, Image, Input, Modal, Form, message, TreeSelect } from "antd";
 import "./signUp.css";
-import { MailOutlined, DeploymentUnitOutlined } from "@ant-design/icons";
+import { MailOutlined } from "@ant-design/icons";
 import { useState, useEffect } from "react";
 import {
   getUniversityAndArea,
   getBillBySingleMail,
   getDormitoryDetails,
+  getDormitoryFloor,
+  postUserSignUp
 } from "@/api/modules/billUtility";
 function SignUp() {
   // interface universityInformation {
@@ -28,24 +30,26 @@ function SignUp() {
   // 唯一value
   const [selectedSchoolValue, setSelectedSchoolValue] = useState("");
   const [selectedDormitoryValue, setSelectedDormitoryValue] = useState("");
+  const [selectedRoomValue, setSelectedRoomValue] = useState("");
+
+  const treeObject = {
+    title: "",
+    value: "",
+    children: [],
+    titleChain: "",
+  };
 
   // tree结构数据
   const [schoolTreeValue, setSchoolTreeValue] = useState<any>([
-    {
-      title: "",
-      value: "",
-      children: [],
-      titleChain: "",
-    },
+    treeObject,
   ]);
 
   const [dormitoryTreeValue, setDormitoryTreeValue] = useState<any>([
-    {
-      title: "",
-      value: "",
-      children: [],
-      titleChain: "",
-    },
+    treeObject,
+  ]);
+
+  const [roomTreeValue, setRoomTreeValue] = useState<any>([
+    treeObject,
   ]);
 
   // useEffect 空数组 初次渲染页面的时候调用
@@ -58,9 +62,16 @@ function SignUp() {
     dormitoryTreeDataFromBackEnd({ universityUuid: selectedSchoolId });
   }, [selectedSchoolId]);
 
+  useEffect(()=>{
+    roomTreeDataFromBackEnd()
+  },[selectedSchoolId])
+
   const submit = async () => {
     const values = await form.validateFields().then((values) => {
-      return values;
+      console.log("userSignUp-value-test",values)
+      postUserSignUp(values).then((result)=>{
+        console.log("userSignUp-test",result)
+      })
     });
 
     setLoading(true);
@@ -84,6 +95,10 @@ function SignUp() {
     setSelectedDormitoryValue(newValue);
   };
 
+  const onChangeRoom = (newValue: any) => {
+    setSelectedRoomValue(newValue);
+  };
+
   // 异步调用接口接收学校数据
   const schoolTreeDataFromBackEnd = async () => {
     await getUniversityAndArea().then((response) => {
@@ -97,6 +112,12 @@ function SignUp() {
       setDormitoryTreeValue(response.dormitoryBuildings);
     });
   };
+
+  const roomTreeDataFromBackEnd = async ()=> {
+    await getDormitoryFloor().then((response)=>{
+      setRoomTreeValue(response.roomLocation)
+    })
+  }
 
   return (
     <Modal
@@ -127,7 +148,7 @@ function SignUp() {
                 <div className="input-wrapper">
                   <Form.Item required={true} name={"mail"}>
                     <Input
-                      placeholder="电子邮件地址"
+                      placeholder='电子邮件地址'
                       size="large"
                       prefix={<MailOutlined />}
                       minLength={1}
@@ -136,8 +157,20 @@ function SignUp() {
                   </Form.Item>
                 </div>
 
+                <div>
+                  <Form.Item required={true} name={"userName"}>
+                  <Input 
+                    placeholder="请输入用户名"
+                    minLength={1}
+                    maxLength={20}
+                    showCount
+                    size="large"
+                    />
+                  </Form.Item>
+                </div>
+
                 <div className="input-wrapper">
-                  <Form.Item required={true} name={"school"}>
+                  <Form.Item required={true} name={"universityCodeId"}>
                     <TreeSelect
                       size="large"
                       style={{
@@ -149,8 +182,8 @@ function SignUp() {
                         overflow: "auto",
                       }}
                       treeData={schoolTreeValue}
-                      treeNodeLabelProp="titleChain" //选择treeData的属性作为下拉列表的回显节点标签
-                      placeholder="请选择--学校和校区"
+                      treeNodeLabelProp='titleChain' //选择treeData的属性作为下拉列表的回显节点标签
+                      placeholder='请选择--学校和校区'
                       // treeDefaultExpandAll  默认展开所有树节点
                       onChange={onChangeSchool}
                       maxTagTextLength={1}
@@ -162,7 +195,7 @@ function SignUp() {
                 </div>
 
                 <div className="input-wrapper">
-                  <Form.Item required={true} name={"dormitory"}>
+                  <Form.Item required={true} name={"dormitoryId"}>
                     <TreeSelect
                       size="large"
                       style={{
@@ -174,8 +207,8 @@ function SignUp() {
                         overflow: "auto",
                       }}
                       treeData={dormitoryTreeValue}
-                      treeNodeLabelProp="titleChain" //选择treeData的属性作为下拉列表的回显节点标签
-                      placeholder="请选择--宿舍区和宿舍楼"
+                      treeNodeLabelProp='titleChain' //选择treeData的属性作为下拉列表的回显节点标签
+                      placeholder='请选择--宿舍区和宿舍楼'
                       // treeDefaultExpandAll  默认展开所有树节点
                       onChange={onChangeDormitory}
                       maxTagTextLength={1}
@@ -184,15 +217,27 @@ function SignUp() {
                 </div>
 
                 <div>
-                  <Form.Item required={true} name={"room"}>
-                  <Input 
-                    placeholder="请输入宿舍号码:114或1103"
-                    maxLength={4} 
-                    showCount
-                    size="large"
+                  <Form.Item required={true} name={"dormitoryRoomId"}>
+                    <TreeSelect
+                      size="large"
+                      style={{
+                        width: "100%",
+                      }}
+                      value={selectedRoomValue}
+                      dropdownStyle={{
+                        maxHeight: 400,
+                        overflow: "auto",
+                      }}
+                      treeData={roomTreeValue}
+                      treeNodeLabelProp='floorRoom' //选择treeData的属性作为下拉列表的回显节点标签
+                      placeholder="请选择--房间号"
+                      // treeDefaultExpandAll  默认展开所有树节点
+                      onChange={onChangeRoom}
+                      maxTagTextLength={1}
                     />
                   </Form.Item>
                 </div>
+                
                 <Button className="continue-btn" onClick={submit}>
                   注冊
                 </Button>
