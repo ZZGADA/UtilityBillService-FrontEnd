@@ -68,7 +68,7 @@ class RequestHttp {
 				}
 				// * 全局错误信息拦截（防止下载文件得时候返回数据流，没有code，直接报错）
 				if (!data || data.code !== ResultEnum.SUCCESS) {
-					message.error(data?.message || '系统异常，请稍后重试！')
+					// message.error(data?.message || '系统异常，请稍后重试！')
 					return Promise.reject(data)
 				}
 				// 输出是文件流时

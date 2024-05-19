@@ -34,5 +34,5 @@
 		}
 	},
 	"include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx","src/**/*.less","src/**/*.svg", "vite.config.ts"],
-	"exclude": ["node_modules", "dist", "**/*.js"]
+	"exclude": ["node_modules", "dist", "**/*.js"],
 }

@@ -7,7 +7,7 @@ import {
   getBillBySingleMail,
   getDormitoryDetails,
   getDormitoryFloor,
-  postUserSignUp
+  postUserSignUp,
 } from "@/api/modules/billUtility";
 function SignUp() {
   // interface universityInformation {
@@ -40,17 +40,13 @@ function SignUp() {
   };
 
   // tree结构数据
-  const [schoolTreeValue, setSchoolTreeValue] = useState<any>([
-    treeObject,
-  ]);
+  const [schoolTreeValue, setSchoolTreeValue] = useState<any>([treeObject]);
 
   const [dormitoryTreeValue, setDormitoryTreeValue] = useState<any>([
     treeObject,
   ]);
 
-  const [roomTreeValue, setRoomTreeValue] = useState<any>([
-    treeObject,
-  ]);
+  const [roomTreeValue, setRoomTreeValue] = useState<any>([treeObject]);
 
   // useEffect 空数组 初次渲染页面的时候调用
   useEffect(() => {
@@ -62,28 +58,47 @@ function SignUp() {
     dormitoryTreeDataFromBackEnd({ universityUuid: selectedSchoolId });
   }, [selectedSchoolId]);
 
-  useEffect(()=>{
-    roomTreeDataFromBackEnd()
-  },[selectedSchoolId])
+  useEffect(() => {
+    roomTreeDataFromBackEnd();
+  }, [selectedSchoolId]);
 
   const submit = async () => {
-    const values = await form.validateFields().then((values) => {
-      console.log("userSignUp-value-test",values)
-      postUserSignUp(values).then((result)=>{
-        console.log("userSignUp-test",result)
-      })
-    });
-
     setLoading(true);
-    getBillBySingleMail(values)
-      .then(() => {
-        setTimeout(() => {
-          message.success("操作成功");
-        }, 700);
+    await form
+      .validateFields()
+      .then((values) => {
+        console.log("validate 校验");
+        postUserSignUp(values)
+          .then((result) => {
+            if (result.verifyCode == 1) {
+              // 表示用户信息已经注册
+              message.info(result.signUpMsg + ",请直接登录");
+            } else {
+              // 用户信息注册成功 多少秒之跳转
+              message.info("用户信息注册成功，请点击邮件链接完成验证");
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+            message.error(error.msg);
+          });
+      })
+      .catch(() => {
+        return;
       })
       .finally(() => {
         setLoading(false);
       });
+
+    // getBillBySingleMail(values)
+    //   .then(() => {
+    //     setTimeout(() => {
+    //       message.success("操作成功");
+    //     }, 700);
+    //   })
+    //   .finally(() => {
+    //     setLoading(false);
+    //   });
   };
 
   // 下拉框勾选标签改变的时候将触发
@@ -113,11 +128,11 @@ function SignUp() {
     });
   };
 
-  const roomTreeDataFromBackEnd = async ()=> {
-    await getDormitoryFloor().then((response)=>{
-      setRoomTreeValue(response.roomLocation)
-    })
-  }
+  const roomTreeDataFromBackEnd = async () => {
+    await getDormitoryFloor().then((response) => {
+      setRoomTreeValue(response.roomLocation);
+    });
+  };
 
   return (
     <Modal
@@ -127,7 +142,7 @@ function SignUp() {
       title={"用户注册"}
       open={visible}
       destroyOnClose
-      footer={null}
+      // footer={null}
     >
       <Form form={form}>
         <div className="page-wrapper">
@@ -142,13 +157,17 @@ function SignUp() {
           <main className="main-container">
             <section className="content-wrapper">
               <div className="title-wrapper">
-                <h1 className="title">欢迎回来</h1>
+                <h1 className="title">欢迎来到ZZGEDA空间</h1>
               </div>
               <div className="login-container">
                 <div className="input-wrapper">
-                  <Form.Item required={true} name={"mail"}>
+                  <Form.Item
+                    required={true}
+                    name={"email"}
+                    rules={[{ required: true, message: "请输入邮箱号" }]}
+                  >
                     <Input
-                      placeholder='电子邮件地址'
+                      placeholder="电子邮件地址"
                       size="large"
                       prefix={<MailOutlined />}
                       minLength={1}
@@ -158,19 +177,27 @@ function SignUp() {
                 </div>
 
                 <div>
-                  <Form.Item required={true} name={"userName"}>
-                  <Input 
-                    placeholder="请输入用户名"
-                    minLength={1}
-                    maxLength={20}
-                    showCount
-                    size="large"
+                  <Form.Item
+                    required={true}
+                    name={"userName"}
+                    rules={[{ required: true, message: "请输入用户名" }]}
+                  >
+                    <Input
+                      placeholder="请输入用户名"
+                      minLength={1}
+                      maxLength={20}
+                      showCount
+                      size="large"
                     />
                   </Form.Item>
                 </div>
 
                 <div className="input-wrapper">
-                  <Form.Item required={true} name={"universityCodeId"}>
+                  <Form.Item
+                    required={true}
+                    name={"universityCodeId"}
+                    rules={[{ required: true, message: "请选择学校-校区" }]}
+                  >
                     <TreeSelect
                       size="large"
                       style={{
@@ -182,8 +209,8 @@ function SignUp() {
                         overflow: "auto",
                       }}
                       treeData={schoolTreeValue}
-                      treeNodeLabelProp='titleChain' //选择treeData的属性作为下拉列表的回显节点标签
-                      placeholder='请选择--学校和校区'
+                      treeNodeLabelProp="titleChain" //选择treeData的属性作为下拉列表的回显节点标签
+                      placeholder="请选择--学校和校区"
                       // treeDefaultExpandAll  默认展开所有树节点
                       onChange={onChangeSchool}
                       maxTagTextLength={1}
@@ -195,7 +222,11 @@ function SignUp() {
                 </div>
 
                 <div className="input-wrapper">
-                  <Form.Item required={true} name={"dormitoryId"}>
+                  <Form.Item
+                    required={true}
+                    name={"dormitoryId"}
+                    rules={[{ required: true, message: "请输入宿舍楼" }]}
+                  >
                     <TreeSelect
                       size="large"
                       style={{
@@ -207,17 +238,22 @@ function SignUp() {
                         overflow: "auto",
                       }}
                       treeData={dormitoryTreeValue}
-                      treeNodeLabelProp='titleChain' //选择treeData的属性作为下拉列表的回显节点标签
-                      placeholder='请选择--宿舍区和宿舍楼'
+                      treeNodeLabelProp="titleChain" //选择treeData的属性作为下拉列表的回显节点标签
+                      showSearch={true}
+                      placeholder="请选择/输入--宿舍区和宿舍楼"
                       // treeDefaultExpandAll  默认展开所有树节点
                       onChange={onChangeDormitory}
-                      maxTagTextLength={1}
+                      // maxTagTextLength={1}
                     />
                   </Form.Item>
                 </div>
 
                 <div>
-                  <Form.Item required={true} name={"dormitoryRoomId"}>
+                  <Form.Item
+                    required={true}
+                    name={"dormitoryRoomId"}
+                    rules={[{ required: true, message: "请选择房间" }]}
+                  >
                     <TreeSelect
                       size="large"
                       style={{
@@ -228,16 +264,17 @@ function SignUp() {
                         maxHeight: 400,
                         overflow: "auto",
                       }}
+                      showSearch={true}
                       treeData={roomTreeValue}
-                      treeNodeLabelProp='floorRoom' //选择treeData的属性作为下拉列表的回显节点标签
-                      placeholder="请选择--房间号"
+                      treeNodeLabelProp="floorRoom" //选择treeData的属性作为下拉列表的回显节点标签
+                      placeholder="请选择/输入--房间号"
                       // treeDefaultExpandAll  默认展开所有树节点
                       onChange={onChangeRoom}
                       maxTagTextLength={1}
                     />
                   </Form.Item>
                 </div>
-                
+
                 <Button className="continue-btn" onClick={submit}>
                   注冊
                 </Button>
