@@ -203,7 +203,7 @@ function SignUp() {
                       style={{
                         width: "100%",
                       }}
-                      value={selectedDormitoryValue}
+                      value={selectedSchoolValue}
                       dropdownStyle={{
                         maxHeight: 400,
                         overflow: "auto",
@@ -232,7 +232,7 @@ function SignUp() {
                       style={{
                         width: "100%",
                       }}
-                      value={selectedSchoolValue}
+                      value={selectedDormitoryValue}
                       dropdownStyle={{
                         maxHeight: 400,
                         overflow: "auto",
