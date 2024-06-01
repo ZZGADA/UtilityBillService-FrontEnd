@@ -20,6 +20,7 @@ function SignUp() {
   //   value: string;
   //   children: Array<universityInformation_item>;
   // }
+  const [confirmDirty, setConfirmDirty] = useState(false);
 
   const [form] = Form.useForm();
   const [visible, setVisible] = useState(true);
@@ -31,6 +32,7 @@ function SignUp() {
   const [selectedSchoolValue, setSelectedSchoolValue] = useState("");
   const [selectedDormitoryValue, setSelectedDormitoryValue] = useState("");
   const [selectedRoomValue, setSelectedRoomValue] = useState("");
+  const [passwordVisible, setPasswordVisible] = useState(false);
 
   const treeObject = {
     title: "",
@@ -134,6 +136,34 @@ function SignUp() {
     });
   };
 
+  const validatePassword = (_: any, value: any) => {
+    if (!value) {
+      return Promise.reject(new Error("请输入密码"));
+    }
+    if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8,}$/.test(value)) {
+      return Promise.reject(
+        new Error("密码必须包含大小写字母和至少一个符号，并且长度至少为8个字符")
+      );
+    }
+    return Promise.resolve();
+  };
+
+  const handleConfirmBlur = (e: any) => {
+    const { value } = e.target;
+    setConfirmDirty(confirmDirty || !!value);
+  };
+
+  const compareToFirstPassword = (_: any, value: any) => {
+    if (value && value !== form.getFieldValue("password")) {
+      return Promise.reject(new Error("两次输入的密码不一致"));
+    }
+    return Promise.resolve();
+  };
+
+  const onFinish = (values: any) => {
+    console.log("Received values of form: ", values);
+  };
+
   return (
     <Modal
       width="620px"
@@ -188,6 +218,51 @@ function SignUp() {
                       maxLength={20}
                       showCount
                       size="large"
+                    />
+                  </Form.Item>
+                </div>
+
+                <div>
+                  <Form.Item
+                    name="password"
+                    rules={[
+                      {
+                        validator: validatePassword,
+                      },
+                    ]}
+                    hasFeedback
+                  >
+                    <Input.Password
+                      size="large"
+                      minLength={8}
+                      maxLength={30}
+                      showCount
+                      placeholder="请输入密码"
+                    />
+                  </Form.Item>
+                </div>
+                <div>
+                  <Form.Item
+                    name="confirmPassword"
+                    dependencies={["password"]}
+                    hasFeedback
+                    rules={[
+                      {
+                        required: true,
+                        message: "请确认您的密码",
+                      },
+                      {
+                        validator: compareToFirstPassword,
+                      },
+                    ]}
+                  >
+                    <Input.Password
+                      size="large"
+                      placeholder="请再次输入密码"
+                      minLength={8}
+                      maxLength={30}
+                      showCount
+                      onBlur={handleConfirmBlur}
                     />
                   </Form.Item>
                 </div>
