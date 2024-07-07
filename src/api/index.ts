@@ -20,7 +20,8 @@ const config = {
 	// withCredentials: true,
 	headers: {
 		'x-requested-with': 'XMLHttpRequest',
-		'Content-Type': 'application/json;charset=utf-8'
+		'Content-Type': 'application/json;charset=utf-8',
+		'token':''
 	}
 }
 
@@ -94,6 +95,7 @@ class RequestHttp {
 
 	// * 常用请求方法封装
 	get<T>(url: string, params?: any, _object = {}): Promise<ResultData<T>> {
+		console.log("ututtiti",params)
 		return this.service.get(url, { params, ..._object })
 	}
 	post<T>(url: string, params?: object, _object = {}): Promise<ResultData<T>> {

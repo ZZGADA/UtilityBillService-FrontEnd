@@ -42,6 +42,15 @@ export const rootRouter: any[] = [
       title: "服务",
       key: "service"
     }
+  },
+  {
+    path: "/",
+    element: lazyLoad(React.lazy(() => import("@/view/LogIn/index"))),
+    meta: {
+      requiresAuth: false,
+      title: "登录页",
+      key: "Login"
+    },
   }
   // ...routerArray,
   // {

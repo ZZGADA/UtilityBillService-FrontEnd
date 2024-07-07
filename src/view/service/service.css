@@ -1,0 +1,102 @@
+/* App.css */
+.App {
+    font-family: sans-serif;
+    text-align: center;
+    overflow: hidden; /* Hide scrollbar during animation */
+  }
+  
+  .welcome-banner {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(90deg, #5B68C2, #BF68BD, #FF72A0, #FF947C, #FFC564, #F9F871);
+    color: white;
+    padding: 10px;
+    font-size: 24px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+  }
+  
+  .content {
+    margin-top: 100px; /* Add some space at the top to avoid content overlap */
+    padding: 20px;
+    display: flex;
+    justify-content: center; /* Center the box horizontally */
+  }
+  
+  .box {
+    background: linear-gradient(90deg, #5B68C2, #BF68BD, #FF72A0, #FF947C, #FFC564, #F9F871);
+    border-radius: 15px; /* Rounded corners */
+    width: 66.66%; /* 2/3 of the screen width */
+    padding: 20px;
+    color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  p {
+    font-size: 18px; /* 段落字体大小 */
+  }
+  
+  .App {
+    font-family: 'Microsoft YaHei', sans-serif;
+    text-align: center;
+    overflow: hidden; /* Hide scrollbar during animation */
+  }
+  
+  .welcome-banner {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(90deg, #5B68C2, #BF68BD, #FF72A0, #FF947C, #FFC564, #F9F871);
+    color: white;
+    padding: 10px;
+    font-size: 24px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+  }
+  
+  .content {
+    margin-top: 100px; /* Add some space at the top to avoid content overlap */
+    padding: 20px;
+    display: flex;
+    justify-content: center; /* Center the box horizontally */
+  }
+  
+  .box {
+    background: linear-gradient(90deg, #5B68C2, #BF68BD, #FF72A0, #FF947C, #FFC564, #F9F871);
+    border-radius: 15px; /* Rounded corners */
+    width: 66.66%; /* 2/3 of the screen width */
+    padding: 20px;
+    color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  p {
+    font-size: 18px; /* 段落字体大小 */
+  }
+  
+  .ant-descriptions-item {
+    font-size: 22px !important; /* 增大 Descriptions.Item 的字体大小 */
+  }
+  
+  .ant-descriptions-view {
+    flex-wrap: nowrap !important; /* 强制所有元素在一行显示 */
+  }
+  
+  /* service.css */
+.collapse-panel {
+  background: linear-gradient(90deg, #5B68C2, #BF68BD, #FF72A0, #FF947C, #FFC564, #F9F871) !important;
+  border-radius: 15px !important; /* 如果你希望圆角一致 */
+  color: white !important; /* 确保文本颜色在背景上可见 */
+}
+
+.collapse-header {
+  background: linear-gradient(90deg, #5B68C2, #BF68BD, #FF72A0, #FF947C, #FFC564, #F9F871) !important;
+  color: white !important;
+}
+
+.collapse-content {
+  background: transparent !important; /* 或者你可以使用与父级相同的背景色 */
+}

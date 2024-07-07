@@ -286,9 +286,9 @@ function SignUp() {
                       treeData={schoolTreeValue}
                       treeNodeLabelProp="titleChain" //选择treeData的属性作为下拉列表的回显节点标签
                       placeholder="请选择--学校和校区"
-                      // treeDefaultExpandAll  默认展开所有树节点
+                      treeDefaultExpandAll  //默认展开所有树节点
                       onChange={onChangeSchool}
-                      maxTagTextLength={1}
+                      maxTagTextLength={10}
                       onSelect={(uniqueId) => {
                         setSelectedSchoolId(uniqueId);
                       }}
@@ -316,7 +316,7 @@ function SignUp() {
                       treeNodeLabelProp="titleChain" //选择treeData的属性作为下拉列表的回显节点标签
                       showSearch={true}
                       placeholder="请选择/输入--宿舍区和宿舍楼"
-                      // treeDefaultExpandAll  默认展开所有树节点
+                      treeDefaultExpandAll  //默认展开所有树节点
                       onChange={onChangeDormitory}
                       // maxTagTextLength={1}
                     />
